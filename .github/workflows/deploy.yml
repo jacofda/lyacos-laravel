@@ -27,12 +27,6 @@ jobs:
             # 1. Vai nella directory
             cd /var/www/lyacos.net
             
-            # 2. Aggiorna o Crea il file .env dai Secret di GitHub
-            # Usiamo le virgolette singole intorno al secret per evitare problemi con caratteri speciali
-            #echo "${{ secrets.PROD_ENV }}" > .env
-            #chmod 600 .env
-            #echo "✅ .env file updated from GitHub Secrets"
-
             # 3. Pull code
             echo "📥 Pulling latest code..."
             git pull origin main
