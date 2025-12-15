@@ -45,7 +45,7 @@ jobs:
             docker exec lyacos_app composer install --no-dev --optimize-autoloader --no-interaction
             
             # Run database migrations
-            docker exec lyacos_app php artisan migrate --force
+            # docker exec lyacos_app php artisan migrate --force
             
             docker exec lyacos_app php artisan config:cache
             docker exec lyacos_app php artisan route:cache
