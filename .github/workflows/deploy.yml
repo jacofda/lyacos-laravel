@@ -51,6 +51,9 @@ jobs:
             docker exec lyacos_app php artisan route:cache
             docker exec lyacos_app php artisan view:cache
             
+            # COMANDO AGGIUNTO PER FISSARE LE IMMAGINI
+            docker exec lyacos_app php artisan storage:link
+            
             # 6. Permessi Storage
             echo "🔐 Fixing permissions..."
             docker exec lyacos_app chown -R www-data:www-data /var/www/storage
