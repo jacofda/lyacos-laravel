@@ -41,10 +41,11 @@ jobs:
             
             # 5. Dipendenze e Cache
             echo "📦 Running Laravel commands..."
+            docker exec lyacos_app git config --global --add safe.directory /var/www
             docker exec lyacos_app composer install --no-dev --optimize-autoloader --no-interaction
             
-            # Se vuoi attivare le migrazioni, decommenta la riga sotto
-            # docker exec lyacos_app php artisan migrate --force
+            # Run database migrations
+            docker exec lyacos_app php artisan migrate --force
             
             docker exec lyacos_app php artisan config:cache
             docker exec lyacos_app php artisan route:cache

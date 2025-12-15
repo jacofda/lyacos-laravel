@@ -42,10 +42,6 @@ RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage \
     && chmod -R 755 /var/www/bootstrap/cache
 
-# Copia e rendi eseguibile lo script di entrypoint
-COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
 # Esponi porta 9000 e avvia php-fpm
 EXPOSE 9000
-ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["php-fpm"]
