@@ -35,6 +35,8 @@ services:
       - ./:/var/www
       - ./nginx/conf.d:/etc/nginx/conf.d
       - ./nginx/ssl:/etc/nginx/ssl
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - nginx_cache:/var/cache/nginx
     depends_on:
       - app
     networks:
@@ -62,4 +64,6 @@ networks:
 
 volumes:
   dbdata:
+    driver: local
+  nginx_cache:
     driver: local

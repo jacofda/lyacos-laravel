@@ -59,7 +59,11 @@ jobs:
             docker exec lyacos_app chown -R www-data:www-data /var/www/storage
             docker exec lyacos_app chmod -R 775 /var/www/storage
             
-            # 7. Cleanup
+            # 7. Svuotamento della cache FPC di Nginx
+            echo "🧹 Purging Nginx FPC cache..."
+            docker exec lyacos_nginx rm -rf /var/cache/nginx/*
+
+            # 8. Cleanup
             echo "🧹 Cleaning up old images..."
             docker system prune -f
             
