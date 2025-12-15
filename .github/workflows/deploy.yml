@@ -1,0 +1,76 @@
+# .github/workflows/deploy.yml
+
+name: Deploy to OVH
+
+on:
+  push:
+    branches: 
+      - main                    # deploy solo quando pusho su main
+  workflow_dispatch:            # oppure manualmente dal sito GitHub
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🚀 Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.OVH_HOST }}
+          username: ${{ secrets.OVH_USERNAME }}
+          key: ${{ secrets.OVH_SSH_KEY }}
+          port: 22
+          script: |
+            echo "🔄 Starting deployment..."
+            
+            # Vai nella directory del progetto
+            cd /var/www/lyacos.net
+            
+            # Pull latest code
+            echo "📥 Pulling latest code..."
+            git pull origin main
+            
+            # Rebuild containers (solo se Dockerfile è cambiato)
+            echo "🐳 Rebuilding containers..."
+            docker compose build app
+            
+            # Restart containers
+            echo "♻️ Restarting containers..."
+            docker compose down
+            docker compose up -d
+            
+            # Aspetta che i container siano pronti
+            echo "⏳ Waiting for containers..."
+            sleep 10
+            
+            # Install/update dependencies
+            echo "📦 Installing dependencies..."
+            docker exec lyacos_app composer install --no-dev --optimize-autoloader --no-interaction
+            
+            # Run migrations
+            # echo "🗄️ Running migrations..."
+            # docker exec lyacos_app php artisan migrate --force
+            
+            # Clear and rebuild cache
+            echo "🧹 Clearing cache..."
+            docker exec lyacos_app php artisan config:clear
+            docker exec lyacos_app php artisan cache:clear
+            docker exec lyacos_app php artisan view:clear
+            docker exec lyacos_app php artisan route:clear
+            
+            echo "📦 Building cache..."
+            docker exec lyacos_app php artisan config:cache
+            docker exec lyacos_app php artisan route:cache
+            docker exec lyacos_app php artisan view:cache
+            
+            # Fix permissions
+            echo "🔐 Fixing permissions..."
+            docker exec lyacos_app chown -R www-data:www-data /var/www/storage
+            docker exec lyacos_app chmod -R 775 /var/www/storage
+            
+            # Cleanup old Docker images
+            echo "🧹 Cleaning up..."
+            docker system prune -f
+            
+            echo "✅ Deployment completed successfully!"
