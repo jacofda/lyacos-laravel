@@ -24,53 +24,45 @@ jobs:
           script: |
             echo "🔄 Starting deployment..."
             
-            # Vai nella directory del progetto
+            # 1. Vai nella directory
             cd /var/www/lyacos.net
             
-            # Pull latest code
+            # 2. Aggiorna o Crea il file .env dai Secret di GitHub
+            # Usiamo le virgolette singole intorno al secret per evitare problemi con caratteri speciali
+            echo "${{ secrets.PROD_ENV }}" > .env
+            chmod 600 .env
+            echo "✅ .env file updated from GitHub Secrets"
+
+            # 3. Pull code
             echo "📥 Pulling latest code..."
             git pull origin main
             
-            # Rebuild containers (solo se Dockerfile è cambiato)
-            echo "🐳 Rebuilding containers..."
-            docker compose build app
+            # 4. Rebuild e Restart
+            # Nota: Docker Compose userà il nuovo .env per le variabili ${...}
+            echo "🐳 Rebuilding and restarting containers..."
+            docker compose up -d --build
             
-            # Restart containers
-            echo "♻️ Restarting containers..."
-            docker compose down
-            docker compose up -d
-            
-            # Aspetta che i container siano pronti
             echo "⏳ Waiting for containers..."
             sleep 10
             
-            # Install/update dependencies
-            echo "📦 Installing dependencies..."
+            # 5. Dipendenze e Cache
+            echo "📦 Running Laravel commands..."
             docker exec lyacos_app composer install --no-dev --optimize-autoloader --no-interaction
             
-            # Run migrations
-            # echo "🗄️ Running migrations..."
+            # Se vuoi attivare le migrazioni, decommenta la riga sotto
             # docker exec lyacos_app php artisan migrate --force
             
-            # Clear and rebuild cache
-            echo "🧹 Clearing cache..."
-            docker exec lyacos_app php artisan config:clear
-            docker exec lyacos_app php artisan cache:clear
-            docker exec lyacos_app php artisan view:clear
-            docker exec lyacos_app php artisan route:clear
-            
-            echo "📦 Building cache..."
             docker exec lyacos_app php artisan config:cache
             docker exec lyacos_app php artisan route:cache
             docker exec lyacos_app php artisan view:cache
             
-            # Fix permissions
+            # 6. Permessi Storage
             echo "🔐 Fixing permissions..."
             docker exec lyacos_app chown -R www-data:www-data /var/www/storage
             docker exec lyacos_app chmod -R 775 /var/www/storage
             
-            # Cleanup old Docker images
-            echo "🧹 Cleaning up..."
+            # 7. Cleanup
+            echo "🧹 Cleaning up old images..."
             docker system prune -f
             
             echo "✅ Deployment completed successfully!"
