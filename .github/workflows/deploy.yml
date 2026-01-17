@@ -4,17 +4,25 @@ name: Deploy to OVH
 
 on:
   push:
-    branches: 
-      - main                    # deploy solo quando pusho su main
-  workflow_dispatch:            # oppure manualmente dal sito GitHub
+    branches:
+      - main # deploy solo quando pusho su main
+  workflow_dispatch: # oppure manualmente dal sito GitHub
 
 jobs:
   deploy:
     name: Deploy to Production
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: 🚀 Deploy via SSH
+      - name: � Echo Secrets
+        run: |
+          echo "Host: ${{ secrets.OVH_HOST }}"
+          echo "Username: ${{ secrets.OVH_USERNAME }}"
+          echo "SSH Key (first 50 chars): ${SSH_KEY:0:50}..."
+        env:
+          SSH_KEY: ${{ secrets.OVH_SSH_KEY }}
+
+      - name: �🚀 Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.OVH_HOST }}
@@ -23,42 +31,42 @@ jobs:
           port: 22
           script: |
             echo "🔄 Starting deployment..."
-            
+
             # 1. Vai nella directory
             cd /var/www/lyacos.net
-            
+
             # 3. Pull code
             echo "📥 Pulling latest code..."
             git pull origin main
-            
+
             # 4. Rebuild e Restart
             # Nota: Docker Compose userà il nuovo .env per le variabili ${...}
             echo "🐳 Rebuilding and restarting containers..."
             docker compose up -d --build
-            
+
             echo "⏳ Waiting for containers..."
             sleep 10
-            
+
             # 5. Dipendenze e Cache
             echo "📦 Running Laravel commands..."
             docker exec lyacos_app git config --global --add safe.directory /var/www
             docker exec lyacos_app composer install --no-dev --optimize-autoloader --no-interaction
-            
+
             # Run database migrations
             # docker exec lyacos_app php artisan migrate --force
-            
+
             docker exec lyacos_app php artisan config:cache
             docker exec lyacos_app php artisan route:cache
             docker exec lyacos_app php artisan view:cache
-            
+
             # COMANDO AGGIUNTO PER FISSARE LE IMMAGINI
             docker exec lyacos_app php artisan storage:link
-            
+
             # 6. Permessi Storage
             echo "🔐 Fixing permissions..."
             docker exec lyacos_app chown -R www-data:www-data /var/www/storage
             docker exec lyacos_app chmod -R 775 /var/www/storage
-            
+
             # 7. Svuotamento della cache FPC di Nginx
             echo "🧹 Purging Nginx FPC cache..."
             docker exec lyacos_nginx rm -rf /var/cache/nginx/*
@@ -66,5 +74,5 @@ jobs:
             # 8. Cleanup
             echo "🧹 Cleaning up old images..."
             docker system prune -f
-            
+
             echo "✅ Deployment completed successfully!"
