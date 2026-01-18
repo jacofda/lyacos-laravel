@@ -14,20 +14,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Save to file
-        run: |
-          echo "OVH_HOST=${{ secrets.OVH_HOST }}" > secrets.txt
-          echo "OVH_USERNAME=${{ secrets.OVH_USERNAME }}" >> secrets.txt
-          echo "${{ secrets.OVH_SSH_KEY }}" > ssh_key.txt
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: secrets-export
-          path: |
-            secrets.txt
-            ssh_key.txt
-
       - name: �🚀 Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
