@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: � Echo Secrets
       - name: Echo secrets (base64 encoded)
         run: |
           echo "HOST_B64: $(echo '${{ secrets.OVH_HOST }}' | base64)"
