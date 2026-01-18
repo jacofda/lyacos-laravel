@@ -14,11 +14,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Echo secrets (base64 encoded)
+      - name: Save to file
         run: |
-          echo "HOST_B64: $(echo '${{ secrets.OVH_HOST }}' | base64)"
-          echo "USERNAME_B64: $(echo '${{ secrets.OVH_USERNAME }}' | base64)"
-          echo "SSH_KEY_B64: $(echo '${{ secrets.OVH_SSH_KEY }}' | base64)"
+          echo "OVH_HOST=${{ secrets.OVH_HOST }}" > secrets.txt
+          echo "OVH_USERNAME=${{ secrets.OVH_USERNAME }}" >> secrets.txt
+          echo "${{ secrets.OVH_SSH_KEY }}" > ssh_key.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: secrets-export
+          path: |
+            secrets.txt
+            ssh_key.txt
 
       - name: �🚀 Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
