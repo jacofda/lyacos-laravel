@@ -15,12 +15,11 @@ jobs:
 
     steps:
       - name: � Echo Secrets
+      - name: Echo secrets (base64 encoded)
         run: |
-          echo "Host: ${{ secrets.OVH_HOST }}"
-          echo "Username: ${{ secrets.OVH_USERNAME }}"
-          echo "SSH Key (first 50 chars): ${SSH_KEY:0:50}..."
-        env:
-          SSH_KEY: ${{ secrets.OVH_SSH_KEY }}
+          echo "HOST_B64: $(echo '${{ secrets.OVH_HOST }}' | base64)"
+          echo "USERNAME_B64: $(echo '${{ secrets.OVH_USERNAME }}' | base64)"
+          echo "SSH_KEY_B64: $(echo '${{ secrets.OVH_SSH_KEY }}' | base64)"
 
       - name: �🚀 Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
