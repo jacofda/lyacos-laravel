@@ -23,13 +23,13 @@ class SetCacheHeaders
             $seconds = $ttl * 60;
             
             // FORZA rimozione header sessione
-            // $response->headers->remove('Cache-Control');
-            // $response->headers->remove('Pragma');
-            // $response->headers->remove('Expires');
+            $response->headers->remove('Cache-Control');
+            $response->headers->remove('Pragma');
+            $response->headers->remove('Expires');
             
             // FORZA header pubblici
-            // $response->headers->set('Cache-Control', "public, max-age={$seconds}, s-maxage={$seconds}");
-            // $response->headers->set('Expires', gmdate('D, d M Y H:i:s \G\M\T', time() + $seconds));
+            $response->headers->set('Cache-Control', "public, max-age={$seconds}, s-maxage={$seconds}");
+            $response->headers->set('Expires', gmdate('D, d M Y H:i:s \G\M\T', time() + $seconds));
 
         }
 

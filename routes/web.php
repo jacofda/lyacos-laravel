@@ -49,10 +49,11 @@ Route::get('books/first-or-out-of-print-editions', [BookController::class, 'oldE
 Route::get('books/excerpts', [BookController::class, 'bookExcerpts']);//index excerpts
 Route::get('books/excerpts/{excerpt}', [BookController::class, 'bookExcerpt']);//show excerpt
 
-Route::get('books/{language}', [BookController::class, 'language']);
-Route::get('books/english/{book}', [BookController::class, 'show']);
-Route::get('books/{language}/{book}', [BookController::class, 'bookTranslation']);
-
+Route::withoutMiddleware(['web'])->group(function () {
+	Route::get('books/{language}', [BookController::class, 'language'])->middleware('cache.headers');
+	Route::get('books/english/{book}', [BookController::class, 'show'])->middleware('cache.headers');
+	Route::get('books/{language}/{book}', [BookController::class, 'bookTranslation'])->middleware('cache.headers');
+});
 
 Route::get('books/{book}/edit', [BookController::class, 'edit']);
 Route::get('books/{book}/media', [BookController::class, 'media']);
