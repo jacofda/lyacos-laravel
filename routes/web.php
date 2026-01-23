@@ -35,8 +35,7 @@ Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
-// Route::get('contact', [PageController::class, 'contacts']);
-// Route::post('contacts', [PageController::class, 'contactsPost']);
+
 Route::get('about-and-press', [PageController::class, 'about']);
 Route::get('results', [PageController::class, 'search']);
 
@@ -116,8 +115,6 @@ Route::post('media-appearances', [ApperanceController::class, 'store']);
 Route::patch('media-appearances/{apperance}', [ApperanceController::class, 'update']);
 Route::delete('media-appearances/{apperance}', [ApperanceController::class, 'destroy']);
 Route::get('media-appearances/{apperance}/media', [ApperanceController::class, 'media']);
-
-// Route::get('the-trilogy-in-other-media/a-video-by-gudrun-bielz-based-on-nyctivoe', 'FormController@video');
 Route::resource('the-trilogy-in-other-media', FormController::class);
 Route::get('the-trilogy-in-other-media/{form}/media', [FormController::class, 'media']);
 

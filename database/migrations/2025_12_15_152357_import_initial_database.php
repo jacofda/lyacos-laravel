@@ -13,7 +13,7 @@ return new class extends Migration
     public function up()
     {
         // Import the SQL dump file
-        $sqlPath = base_path('lyacos-db.sql');
+        $sqlPath = base_path('database/db.sql');
         
         if (!file_exists($sqlPath)) {
             throw new \Exception("SQL file not found: {$sqlPath}");

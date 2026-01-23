@@ -1,47 +1,76 @@
-FROM php:8.2-fpm
+FROM php:8.2-fpm-alpine
 
-# Installa dipendenze di sistema
-RUN apt-get update && apt-get install -y \
-    git \
+# Set working directory
+WORKDIR /var/www/html
+
+# Install system dependencies and PHP extensions
+RUN apk add --no-cache \
+    nginx \
     curl \
     libpng-dev \
-    libonig-dev \
-    libxml2-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    oniguruma-dev \
+    libzip-dev \
     zip \
     unzip \
-    libzip-dev \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    default-mysql-client
+    sqlite \
+    sqlite-dev \
+    bash \
+    git \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) \
+    pdo \
+    pdo_sqlite \
+    pdo_mysql \
+    mbstring \
+    exif \
+    pcntl \
+    bcmath \
+    gd \
+    zip
 
-# Pulisci cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Installa estensioni PHP
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
-
-# Installa Composer
+# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Imposta working directory
-WORKDIR /var/www
+# Copy composer files first for better layer caching
+COPY composer.json composer.lock /var/www/html/
 
-# Copia i file dell'applicazione
-COPY . /var/www
+# Create required directories before composer install
+RUN mkdir -p storage/framework/cache/data \
+    && mkdir -p storage/framework/sessions \
+    && mkdir -p storage/framework/views \
+    && mkdir -p storage/logs \
+    && mkdir -p bootstrap/cache \
+    && mkdir -p database/seeds \
+    && mkdir -p database/factories
 
-# Copia composer.json e composer.lock
-COPY composer.json composer.lock /var/www/
+# Install composer dependencies (cached if composer files unchanged)
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts --no-ansi
 
-# Installa dipendenze PHP
-RUN composer install --no-interaction --optimize-autoloader --no-dev --ignore-platform-reqs || \
-    (composer install --no-interaction --optimize-autoloader --no-dev)
+# Copy entrypoint script BEFORE copying application files
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Imposta permessi
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www/storage \
-    && chmod -R 755 /var/www/bootstrap/cache
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/http.d/default.conf
 
-# Esponi porta 9000 e avvia php-fpm
-EXPOSE 9000
-CMD ["php-fpm"]
+# Copy application files
+COPY . /var/www/html
+
+# Fix git ownership issue for composer
+RUN git config --global --add safe.directory /var/www/html
+
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
+RUN chmod 664 /var/www/html/database/db.sql
+
+
+# Run post-install scripts now that all files are present
+RUN composer dump-autoload --optimize --no-dev --no-scripts
+
+# Expose port 80
+EXPOSE 80
+
+# Use entrypoint script to fix permissions at runtime
+ENTRYPOINT ["docker-entrypoint.sh"]

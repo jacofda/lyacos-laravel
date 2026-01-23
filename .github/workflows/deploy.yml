@@ -52,6 +52,7 @@ jobs:
             docker exec lyacos_app php artisan view:cache
 
             # COMANDO AGGIUNTO PER FISSARE LE IMMAGINI
+            docker exec lyacos_app rm -f public/storage
             docker exec lyacos_app php artisan storage:link
 
             # 6. Permessi Storage

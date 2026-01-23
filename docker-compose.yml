@@ -5,9 +5,11 @@ services:
       dockerfile: Dockerfile
     container_name: ${COMPOSE_PROJECT_NAME}_app
     restart: unless-stopped
-    working_dir: /var/www
+    working_dir: /var/www/html
+    ports:
+      - "8002:80"
     volumes:
-      - ./:/var/www
+      - ./:/var/www/html
     environment:
       - APP_ENV=${APP_ENV}
       - APP_DEBUG=${APP_DEBUG}
