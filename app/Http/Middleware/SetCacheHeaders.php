@@ -11,10 +11,10 @@ class SetCacheHeaders
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @param  string|null  $ttl  Cache time in minutes (default: 60)
+     * @param  string|null  $ttl  Cache time in minutes (default: 10 days)
      * @return mixed
      */
-    public function handle($request, Closure $next, $ttl = 60)
+    public function handle($request, Closure $next, $ttl = 14400)
     {
         $response = $next($request);
 

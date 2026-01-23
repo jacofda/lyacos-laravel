@@ -29,27 +29,30 @@ Route::delete('contacts/{id}', [GoogleV3CaptchaController::class, 'destroy']);
 use App\Http\Controllers\{AdminController, ApperanceController, BookController, ExcerptController, FormController, PageController, PublicationController, ReadingController, ReviewController, TranslationController};
 use App\Http\Controllers\Auth\LoginController;
 
-Route::get('/', [PageController::class, 'welcome']);
+Route::withoutMiddleware(['web'])->group(function () {
+	Route::get('/', [PageController::class, 'welcome'])->middleware('cache.headers:15');
+});	
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
-
-Route::get('about-and-press', [PageController::class, 'about']);
+Route::withoutMiddleware(['web'])->group(function () {
+	Route::get('about-and-press', [PageController::class, 'about'])->middleware('cache.headers');
+});
 Route::get('results', [PageController::class, 'search']);
 
 Route::get('/home', [AdminController::class, 'home'])->name('home');
 Route::get('books/create', [BookController::class, 'create']);
-Route::get('books', [BookController::class, 'index']);
-Route::get('books/in-translation', [BookController::class, 'inTranslation']);
-Route::get('books/first-or-out-of-print-editions', [BookController::class, 'oldEditions']);
-
-
-Route::get('books/excerpts', [BookController::class, 'bookExcerpts']);//index excerpts
-Route::get('books/excerpts/{excerpt}', [BookController::class, 'bookExcerpt']);//show excerpt
 
 Route::withoutMiddleware(['web'])->group(function () {
+	Route::get('books', [BookController::class, 'index']);
+	Route::get('books/in-translation', [BookController::class, 'inTranslation'])->middleware('cache.headers');
+	Route::get('books/first-or-out-of-print-editions', [BookController::class, 'oldEditions'])->middleware('cache.headers');
+
+	Route::get('books/excerpts', [BookController::class, 'bookExcerpts'])->middleware('cache.headers');
+	Route::get('books/excerpts/{excerpt}', [BookController::class, 'bookExcerpt'])->middleware('cache.headers');
+
 	Route::get('books/{language}', [BookController::class, 'language'])->middleware('cache.headers');
 	Route::get('books/english/{book}', [BookController::class, 'show'])->middleware('cache.headers');
 	Route::get('books/{language}/{book}', [BookController::class, 'bookTranslation'])->middleware('cache.headers');
@@ -73,23 +76,31 @@ Route::get('publications/{type}/{publication}', [PublicationController::class, '
 Route::get('publications/create', [PublicationController::class, 'create']);
 Route::get('publications/{publication}/edit', [PublicationController::class, 'edit']);
 Route::get('publications/{publication}/media', [PublicationController::class, 'media']);
-Route::get('publications', [PublicationController::class, 'index']);
-Route::get('interviews', [PublicationController::class, 'interviews']);
+
+Route::withoutMiddleware(['web'])->group(function () {
+	Route::get('publications', [PublicationController::class, 'index'])->middleware('cache.headers:15');
+	Route::get('interviews', [PublicationController::class, 'interviews'])->middleware('cache.headers:15');
+});
+
 Route::post('publications', [PublicationController::class, 'store']);
 Route::patch('publications/{publication}', [PublicationController::class, 'update']);
 Route::delete('publications/{publication}', [PublicationController::class, 'destroy']);
 
 Route::get('excerpts/create', [ExcerptController::class, 'create']);
-Route::get('excerpts/{language}', [ExcerptController::class, 'language']);
+Route::withoutMiddleware(['web'])->group(function () {
+	Route::get('excerpts/{language}', [ExcerptController::class, 'language'])->middleware('cache.headers:15');
+});
 Route::get('excerpts/{excerpt}/edit', [ExcerptController::class, 'edit']);
 Route::get('excerpts/{excerpt}/media', [ExcerptController::class, 'media']);
-Route::get('excerpts', [ExcerptController::class, 'index']);
+Route::withoutMiddleware(['web'])->group(function () {
+	Route::get('excerpts', [ExcerptController::class, 'index'])->middleware('cache.headers:15');
+});
 Route::post('excerpts', [ExcerptController::class, 'store']);
 Route::patch('excerpts/{excerpt}', [ExcerptController::class, 'update']);
 Route::delete('excerpts/{excerpt}', [ExcerptController::class, 'destroy']);
 
 Route::get('reviews/create', [ReviewController::class, 'create']);
-Route::get('reviews/{review}', [ReviewController::class, 'show']);
+Route::get('reviews/{review}', [ReviewController::class, 'show'])->middleware('cache.headers:15');
 Route::get('reviews/{review}/edit', [ReviewController::class, 'edit']);
 Route::get('reviews/{review}/media', [ReviewController::class, 'media']);
 Route::get('reviews', [ReviewController::class, 'index']);
