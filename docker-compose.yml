@@ -21,23 +21,6 @@ services:
     networks:
       - laravel
 
-  nginx:
-    image: nginx:alpine
-    container_name: ${COMPOSE_PROJECT_NAME}_nginx
-    restart: unless-stopped
-    ports:
-      - "${NGINX_PORT:-80}:80"
-    volumes:
-      - ./:/var/www
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./nginx/ssl:/etc/nginx/ssl
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - nginx_cache:/var/cache/nginx
-    depends_on:
-      - app
-    networks:
-      - laravel
-
   db:
     image: mysql:8.0
     container_name: ${COMPOSE_PROJECT_NAME}_db
@@ -60,6 +43,4 @@ networks:
 
 volumes:
   dbdata:
-    driver: local
-  nginx_cache:
     driver: local
