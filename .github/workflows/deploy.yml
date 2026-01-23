@@ -27,6 +27,12 @@ jobs:
             # 1. Vai nella directory
             cd /var/www/lyacos.net
 
+            # 2. Force reset to clean state
+            echo "🔄 Resetting to clean state..."
+            git fetch origin
+            git reset --hard origin/main
+            git clean -fd
+
             # 3. Pull code
             echo "📥 Pulling latest code..."
             git pull origin main
