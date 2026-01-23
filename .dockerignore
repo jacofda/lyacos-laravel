@@ -1,0 +1,29 @@
+# Ignore storage files (user uploads)
+storage/app/public/*
+!storage/app/public/.gitignore
+
+# Ignore other runtime storage
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/logs/*
+
+# Ignore git
+.git
+.github
+
+# Ignore node modules
+node_modules
+
+# Ignore env files
+.env
+.env.*
+!.env.example
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore tests
+tests
+phpunit.xml
