@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dimitris Lyacos - Information and Resources on the Contemporary Author</title>
+    <title>Dimitris Lyacos | Information and Resources on the Contemporary Author</title>
     <link rel="canonical" href="{{config('app.url')}}">
     <meta name="description" content="Official compendium of information and resources on the contemporary author Dimitris Lyacos. Along with news on current publications, here you will find regular updates on readings and other events as well as reviews and interviews in poetry journals and other literary sources.">
     <link rel="shortcut icon" href="{{asset('favicon.ico')}}" type="image/x-icon">
