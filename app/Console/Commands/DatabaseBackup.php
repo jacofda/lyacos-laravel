@@ -27,9 +27,13 @@ class DatabaseBackup extends Command
         
         $fullPath = $backupPath . $ds . $filename;
         
+        // Get the container name from environment
+        $containerName = env('COMPOSE_PROJECT_NAME', 'lyacos') . '_db';
+        
+        // Execute mysqldump from the database container
         $command = sprintf(
-            'mysqldump -h%s -u%s -p%s %s > %s',
-            escapeshellarg($host),
+            'docker exec %s mysqldump -u%s -p%s %s > %s',
+            escapeshellarg($containerName),
             escapeshellarg($username),
             escapeshellarg($password),
             escapeshellarg($database),
@@ -45,6 +49,9 @@ class DatabaseBackup extends Command
             $this->info("File size: " . number_format(filesize($fullPath) / 1024 / 1024, 2) . " MB");
         } else {
             $this->error('Database backup failed!');
+            if (!empty($output)) {
+                $this->error(implode("\n", $output));
+            }
         }
         
         return $returnVar;
