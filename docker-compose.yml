@@ -16,33 +16,9 @@ services:
       - APP_URL=${APP_URL}
       - LOG_CHANNEL=${LOG_CHANNEL}
       - BETTERSTACK_SOURCE_TOKEN=${BETTERSTACK_SOURCE_TOKEN}
-      - DB_HOST=db
-      - DB_DATABASE=${DB_DATABASE}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
-    networks:
-      - laravel
-
-  db:
-    image: mysql:8.0
-    container_name: ${COMPOSE_PROJECT_NAME}_db
-    restart: unless-stopped
-    environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_USER: ${DB_USERNAME}
-    volumes:
-      - dbdata:/var/lib/mysql
-    ports:
-      - "${DB_PORT:-3306}:3306"
     networks:
       - laravel
 
 networks:
   laravel:
     driver: bridge
-
-volumes:
-  dbdata:
-    driver: local

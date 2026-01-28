@@ -27,3 +27,4 @@ Thumbs.db
 # Ignore tests
 tests
 phpunit.xml
+mysql2sqlite
