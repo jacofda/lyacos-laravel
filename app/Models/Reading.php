@@ -27,7 +27,7 @@ class Reading extends Primitive
 
     public function getReadingSlugAttribute()
     {
-    	return config('app.url').'readings/'.$this->published_at->format('Y').'/'.$this->slug;
+    	return config('app.url').'/readings/'.$this->published_at->format('Y').'/'.$this->slug;
     }
 
     public function getUrlAttribute()
