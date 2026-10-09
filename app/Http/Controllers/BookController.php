@@ -75,33 +75,6 @@ class BookController extends Controller
     //books/{language}/{book}
     public function bookTranslation($language, $translation)
     {
-
-        if($translation == 'media')
-        {
-            if(\Auth::guest())
-            {
-                return back()->with('message', 'Area only for Authenticated user');
-            }
-            $element = Book::findBySlugOrFail($language);
-            return view('pages.books.media', compact('element'));
-        }
-        elseif($translation == 'edit')
-        {
-            if(\Auth::guest())
-            {
-                return back()->with('message', 'Area only for Authenticated user');
-            }
-            $element = Book::findBySlugOrFail($language);
-            $formats = Format::pluck('name', 'id');
-            $selectedFormat = [];
-            foreach ($element->formats as $value) {
-                $selectedFormat[] = $value->id;
-            }
-            return view('pages.books.edit', compact('element', 'formats', 'selectedFormat'));
-        }
-
-
-
         if(Language::where('slug', $language)->exists())
         {
             if(Translation::where('slug', $translation)->where('language_id', Language::where('slug', $language)->first()->id)->exists())

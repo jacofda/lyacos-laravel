@@ -44,6 +44,8 @@ Route::get('results', [PageController::class, 'search']);
 
 Route::get('/home', [AdminController::class, 'home'])->name('home');
 Route::get('books/create', [BookController::class, 'create']);
+Route::get('books/{book}/edit', [BookController::class, 'edit']);
+Route::get('books/{book}/media', [BookController::class, 'media']);
 
 Route::withoutMiddleware(['web'])->group(function () {
 	Route::get('books', [BookController::class, 'index']);
@@ -58,8 +60,6 @@ Route::withoutMiddleware(['web'])->group(function () {
 	Route::get('books/{language}/{book}', [BookController::class, 'bookTranslation'])->middleware('cache.headers');
 });
 
-Route::get('books/{book}/edit', [BookController::class, 'edit']);
-Route::get('books/{book}/media', [BookController::class, 'media']);
 Route::post('books', [BookController::class, 'store']);
 Route::patch('books/{book}', [BookController::class, 'update']);
 Route::delete('books/{book}', [BookController::class, 'destroy']);
