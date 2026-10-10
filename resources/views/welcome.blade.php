@@ -70,6 +70,7 @@
         .new-book-cover img { display: block; width: 160px; height: auto; }
         .new-book-cover small { display: block; margin-top: 8px; white-space: nowrap; }
         .new-book-text { flex: 1; min-width: 0; }
+        .new-book-text li a { text-decoration: underline; text-underline-offset: 3px; }
         @media (max-width: 767px) { .new-book { flex-direction: column; gap: 20px; } }
     </style>
 </head>
@@ -171,8 +172,8 @@
                             </li>
                             @foreach($newBookTranslations as $translation)
                                 <li>
-                                    <strong>{{ucfirst($translation->language->name)}} edition</strong> &mdash; <a href="{{$translation->uri}}">{{$translation->name}}</a>,
-                                    translated by {{$translation->translated_by}}, {{$translation->publisher}}, {{$translation->published_at->format('M Y')}}
+                                    <a href="{{$translation->uri}}"><strong>{{ucfirst($translation->language->name)}} edition</strong> &mdash; {{$translation->name}},
+                                    translated by {{$translation->translated_by}}, {{$translation->publisher}}, {{$translation->published_at->format('M Y')}}</a>
                                 </li>
                             @endforeach
                         </ul>
