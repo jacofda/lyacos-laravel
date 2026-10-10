@@ -22,9 +22,15 @@ chmod 775 /var/www/html/storage/framework/cache/data
 chmod 775 /var/www/html/storage/logs
 
 # Fix database permissions (critical for SQLite)
+# Not recursive: SQLite only needs the directory (for journal files) and the db file.
+# migrations/, seeders/ and factories/ must stay owned by the host user, or git pull can't write them.
 if [ -d /var/www/html/database ]; then
-    chown -R www-data:www-data /var/www/html/database
+    chown www-data:www-data /var/www/html/database
     chmod 775 /var/www/html/database
+    if [ -f /var/www/html/database/db.sqlite ]; then
+        chown www-data:www-data /var/www/html/database/db.sqlite
+        chmod 664 /var/www/html/database/db.sqlite
+    fi
     if [ -f /var/www/html/database/db.sql ]; then
         chmod 664 /var/www/html/database/db.sql
     fi
