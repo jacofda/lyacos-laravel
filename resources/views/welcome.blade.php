@@ -65,6 +65,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,800,700,600|Montserrat:400,500,600,700|Raleway:100,300,600,700,800" rel="stylesheet" type="text/css" />
     <link href="{{asset('css/min.css')}}" rel="stylesheet">
+    <style>
+        .new-book { display: flex; align-items: flex-start; gap: 50px; }
+        .new-book-cover img { display: block; width: 160px; height: auto; }
+        .new-book-cover small { display: block; margin-top: 8px; white-space: nowrap; }
+        .new-book-text { flex: 1; min-width: 0; }
+        @media (max-width: 767px) { .new-book { flex-direction: column; gap: 20px; } }
+    </style>
 </head>
 <body>
 
@@ -140,34 +147,36 @@
     <section class="p-t-0">
         <div class="container">
             <div class="row">
-                <div class="col-sm-3 col-md-2 col-md-offset-1 m-b-20">
+                <div class="col-md-10 col-md-offset-1 new-book">
                     @if($newBookCoverEdition)
-                        <a href="{{$newBookCoverEdition->uri}}"><img class="img-responsive" style="max-width:160px" src="{{$newBookCoverEdition->cover}}" alt="cover {{$newBookCoverEdition->name}}"></a>
-                        <small>Cover of the Italian edition</small>
+                        <div class="new-book-cover">
+                            <a href="{{$newBookCoverEdition->uri}}"><img src="{{$newBookCoverEdition->cover}}" alt="cover {{$newBookCoverEdition->name}}"></a>
+                            <small>Cover of the Italian edition</small>
+                        </div>
                     @endif
-                </div>
-                <div class="col-sm-9 col-md-8">
-                    <span class="uppercase bold">New Book</span>
-                    <h2 class="asH3"><a href="{{$newBook->uri}}">{{$newBook->name}}</a></h2>
-                    <p class="smallerLineHeigh">{{ $newBookIntro }}</p>
-                    <p><a href="{{$newBook->uri}}" class="btn btn-dark btn-outline">Read more</a></p>
-                    <ul class="list-unstyled">
-                        <li>
-                            <strong>English edition</strong> &mdash; Translated by {{$newBook->translated_by}},
-                            @if($newBook->buy_link)
-                                <a target="_BLANK" href="{{$newBook->buy_link}}">{{$newBook->publisher}}</a>,
-                            @else
-                                {{$newBook->publisher}},
-                            @endif
-                            {{ $newBook->published_at->isFuture() ? 'forthcoming '.$newBook->published_at->format('F Y') : $newBook->published_at->format('M Y') }}
-                        </li>
-                        @foreach($newBookTranslations as $translation)
+                    <div class="new-book-text">
+                        <span class="uppercase bold">New Book</span>
+                        <h2 class="asH3"><a href="{{$newBook->uri}}">{{$newBook->name}}</a></h2>
+                        <p class="smallerLineHeigh">{{ $newBookIntro }}</p>
+                        <p><a href="{{$newBook->uri}}" class="btn btn-dark btn-outline">Read more</a></p>
+                        <ul class="list-unstyled">
                             <li>
-                                <strong>{{ucfirst($translation->language->name)}} edition</strong> &mdash; <a href="{{$translation->uri}}">{{$translation->name}}</a>,
-                                translated by {{$translation->translated_by}}, {{$translation->publisher}}, {{$translation->published_at->format('M Y')}}
+                                <strong>English edition</strong> &mdash; Translated by {{$newBook->translated_by}},
+                                @if($newBook->buy_link)
+                                    <a target="_BLANK" href="{{$newBook->buy_link}}">{{$newBook->publisher}}</a>,
+                                @else
+                                    {{$newBook->publisher}},
+                                @endif
+                                {{ $newBook->published_at->isFuture() ? 'forthcoming '.$newBook->published_at->format('F Y') : $newBook->published_at->format('M Y') }}
                             </li>
-                        @endforeach
-                    </ul>
+                            @foreach($newBookTranslations as $translation)
+                                <li>
+                                    <strong>{{ucfirst($translation->language->name)}} edition</strong> &mdash; <a href="{{$translation->uri}}">{{$translation->name}}</a>,
+                                    translated by {{$translation->translated_by}}, {{$translation->publisher}}, {{$translation->published_at->format('M Y')}}
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
