@@ -68,7 +68,7 @@ class Book extends Primitive
         {
             return asset('storage/'.$this->directory.'/display/'.$this->media()->where('type', 'cover')->orderBy('media_order', 'ASC')->first()->filename);
         }
-        return "http://via.placeholder.com/510x810";
+        return $this->display;
     }
 
 }

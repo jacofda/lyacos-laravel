@@ -136,6 +136,46 @@
         </div>
     </section>
 
+    @if($newBook)
+    <section class="p-t-0">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4 col-md-3 col-md-offset-1 m-b-20">
+                    @if($newBookHasCover)
+                        <a href="{{$newBook->uri}}"><img class="img-responsive" src="{{$newBook->cover}}" alt="cover {{$newBook->name}}"></a>
+                    @elseif($newBookTranslations->isNotEmpty())
+                        <a href="{{$newBookTranslations->first()->uri}}"><img class="img-responsive" src="{{$newBookTranslations->first()->cover}}" alt="cover {{$newBookTranslations->first()->name}}"></a>
+                        <small>Cover of the {{ucfirst($newBookTranslations->first()->language->name)}} edition</small>
+                    @endif
+                </div>
+                <div class="col-sm-8 col-md-7">
+                    <span class="uppercase bold">New Book</span>
+                    <h2 class="asH3"><a href="{{$newBook->uri}}">{{$newBook->name}}</a></h2>
+                    <p class="smallerLineHeigh">{{ $newBookIntro }}</p>
+                    <p><a href="{{$newBook->uri}}" class="btn btn-dark btn-outline">Read more</a></p>
+                    <ul class="list-unstyled">
+                        <li>
+                            <strong>English edition</strong> &mdash; Translated by {{$newBook->translated_by}},
+                            @if($newBook->buy_link)
+                                <a target="_BLANK" href="{{$newBook->buy_link}}">{{$newBook->publisher}}</a>,
+                            @else
+                                {{$newBook->publisher}},
+                            @endif
+                            {{ $newBook->published_at->isFuture() ? 'forthcoming '.$newBook->published_at->format('F Y') : $newBook->published_at->format('M Y') }}
+                        </li>
+                        @foreach($newBookTranslations as $translation)
+                            <li>
+                                <strong>{{ucfirst($translation->language->name)}} edition</strong> &mdash; <a href="{{$translation->uri}}">{{$translation->name}}</a>,
+                                translated by {{$translation->translated_by}}, {{$translation->publisher}}, {{$translation->published_at->format('M Y')}}
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    @endif
+
     <section class="p-t-0">
         <div class="container">
             <div class="row">

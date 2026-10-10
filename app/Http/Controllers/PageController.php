@@ -25,9 +25,14 @@ class PageController extends Controller
         //     return Publication::->whereDate('published_at', '>=',Carbon::today()->subYear())->whereDate('published_at', '<=', Carbon::today())->orderBy('published_at', 'DESC')->get();
         // });
 
+        // Until the Victim Becomes Our Own: until the English cover is uploaded, show the cover of the first translation
+        $newBook = Book::with('translations.language')->find(6);
+        $newBookHasCover = $newBook && $newBook->media()->where('type', 'cover')->exists();
+        $newBookTranslations = $newBook ? $newBook->translations->sortBy('published_at') : collect();
+        $newBookIntro = $newBook ? strip_tags(preg_split('/<br\s*\/?>|\R/i', trim($newBook->description))[0]) : null;
 
         $collection = collect()
-                        ->merge(Book::whereDate('published_at', '>=', Carbon::today()->subYear())->get())
+                        ->merge(Book::whereDate('published_at', '>=', Carbon::today()->subYear())->where('id', '!=', 6)->get())
                         ->merge(Translation::whereDate('published_at', '>=', Carbon::today()->subYear())->get())
                         ->merge(Publication::whereDate('published_at', '>=', Carbon::today()->subYear())->get())
                         ->merge(Review::whereDate('published_at', '>=', Carbon::today()->subYear())->get())
@@ -37,7 +42,7 @@ class PageController extends Controller
         $collection = $collection->sortByDesc('published_at');
 
 // return $collection;
-        return view('welcome', compact('books', 'collection'));
+        return view('welcome', compact('books', 'collection', 'newBook', 'newBookHasCover', 'newBookTranslations', 'newBookIntro'));
     }
 
     public function search()
