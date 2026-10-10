@@ -9,6 +9,7 @@ RUN apk add --no-cache \
     curl \
     libpng-dev \
     libjpeg-turbo-dev \
+    libwebp-dev \
     freetype-dev \
     oniguruma-dev \
     libzip-dev \
@@ -18,7 +19,7 @@ RUN apk add --no-cache \
     sqlite-dev \
     bash \
     git \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) \
     pdo \
     pdo_sqlite \

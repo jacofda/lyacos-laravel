@@ -67,7 +67,7 @@ class MediaHelper {
 
     public function isImage($file)
     {
-        $imageExtensions = ['jpeg','jpg','png'];
+        $imageExtensions = ['jpeg','jpg','png','webp'];
         $ext = strtolower($file->getClientOriginalExtension());
         if ( in_array($ext, $imageExtensions) )
         {
