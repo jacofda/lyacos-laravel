@@ -140,15 +140,13 @@
     <section class="p-t-0">
         <div class="container">
             <div class="row">
-                <div class="col-sm-4 col-md-3 col-md-offset-1 m-b-20">
-                    @if($newBookHasCover)
-                        <a href="{{$newBook->uri}}"><img class="img-responsive" src="{{$newBook->cover}}" alt="cover {{$newBook->name}}"></a>
-                    @elseif($newBookTranslations->isNotEmpty())
-                        <a href="{{$newBookTranslations->first()->uri}}"><img class="img-responsive" src="{{$newBookTranslations->first()->cover}}" alt="cover {{$newBookTranslations->first()->name}}"></a>
-                        <small>Cover of the {{ucfirst($newBookTranslations->first()->language->name)}} edition</small>
+                <div class="col-sm-3 col-md-2 col-md-offset-1 m-b-20">
+                    @if($newBookCoverEdition)
+                        <a href="{{$newBookCoverEdition->uri}}"><img class="img-responsive" style="max-width:160px" src="{{$newBookCoverEdition->cover}}" alt="cover {{$newBookCoverEdition->name}}"></a>
+                        <small>Cover of the Italian edition</small>
                     @endif
                 </div>
-                <div class="col-sm-8 col-md-7">
+                <div class="col-sm-9 col-md-8">
                     <span class="uppercase bold">New Book</span>
                     <h2 class="asH3"><a href="{{$newBook->uri}}">{{$newBook->name}}</a></h2>
                     <p class="smallerLineHeigh">{{ $newBookIntro }}</p>

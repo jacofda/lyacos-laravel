@@ -25,10 +25,10 @@ class PageController extends Controller
         //     return Publication::->whereDate('published_at', '>=',Carbon::today()->subYear())->whereDate('published_at', '<=', Carbon::today())->orderBy('published_at', 'DESC')->get();
         // });
 
-        // Until the Victim Becomes Our Own: until the English cover is uploaded, show the cover of the first translation
+        // Until the Victim Becomes Our Own: the English cover is not ready yet, so the home shows the Italian edition's cover
         $newBook = Book::with('translations.language')->find(6);
-        $newBookHasCover = $newBook && $newBook->media()->where('type', 'cover')->exists();
         $newBookTranslations = $newBook ? $newBook->translations->sortBy('published_at') : collect();
+        $newBookCoverEdition = $newBookTranslations->firstWhere('language.slug', 'italian');
         $newBookIntro = $newBook ? strip_tags(preg_split('/<br\s*\/?>|\R/i', trim($newBook->description))[0]) : null;
 
         $collection = collect()
@@ -42,7 +42,7 @@ class PageController extends Controller
         $collection = $collection->sortByDesc('published_at');
 
 // return $collection;
-        return view('welcome', compact('books', 'collection', 'newBook', 'newBookHasCover', 'newBookTranslations', 'newBookIntro'));
+        return view('welcome', compact('books', 'collection', 'newBook', 'newBookTranslations', 'newBookCoverEdition', 'newBookIntro'));
     }
 
     public function search()
