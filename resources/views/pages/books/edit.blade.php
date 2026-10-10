@@ -6,7 +6,7 @@ Edit {{$element->name}}
 
 @section('content')
 
-    {!!Form::model($element, ['method' => 'PATCH', 'class' => 'col col-sm-10', 'url' => $element->uri])!!}
+    {!!Form::model($element, ['method' => 'PATCH', 'class' => 'col col-sm-10', 'url' => url('books/'.$element->slug)])!!}
 
         @include('pages.books.form',  ['submitButtonText' => 'Update'])
 

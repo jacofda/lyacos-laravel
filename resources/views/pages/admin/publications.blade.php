@@ -29,7 +29,7 @@ Publications
 					<td><small>{{$element->type}}</small></td>
 					<td><small>{{$element->published_at->format('M Y')}}</small></td>
 					<td>
-						{!! Form::open(['method' => 'delete', 'url' => $element->uri]) !!}
+						{!! Form::open(['method' => 'delete', 'url' => url('publications/'.$element->slug)]) !!}
 							<button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
 							<a class="btn btn-primary btn-sm" href="{{$element->uri}}"><i class="fa fa-eye"></i></a>
 							<a class="btn btn-success btn-sm" href="{{url('publications/'.$element->slug)}}/edit"><i class="fa fa-edit"></i></a>
