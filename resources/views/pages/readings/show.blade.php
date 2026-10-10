@@ -17,6 +17,22 @@
 
 @stop
 
+@section('styles')
+<style>
+    .video-modal { width: min(1100px, 92vw, calc((100vh - 140px) * 16 / 9)); max-width: none; max-height: none; padding: 0; border: 0; background: transparent; overflow: visible; }
+    .video-modal::backdrop { background: rgba(12, 12, 12, .92); backdrop-filter: blur(4px); }
+    .video-modal[open] { animation: video-modal-in .3s ease-out; }
+    .video-modal[open]::backdrop { animation: video-modal-fade .3s ease-out; }
+    .video-modal-frame { aspect-ratio: 16 / 9; background: #000; border-radius: 4px; overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, .6); }
+    .video-modal-frame iframe { display: block; width: 100%; height: 100%; border: 0; }
+    .video-modal-close { position: absolute; top: -56px; right: 0; width: 44px; height: 44px; padding: 0; border: 1px solid rgba(255, 255, 255, .4); border-radius: 50%; background: transparent; color: #fff; font-size: 18px; line-height: 42px; text-align: center; cursor: pointer; transition: all .3s; }
+    .video-modal-close:hover, .video-modal-close:focus-visible { background: #57AAB4; border-color: #57AAB4; outline: 0; }
+    body:has(.video-modal[open]) { overflow: hidden; }
+    @keyframes video-modal-in { from { opacity: 0; transform: scale(.96); } }
+    @keyframes video-modal-fade { from { opacity: 0; } }
+</style>
+@stop
+
 @section('content')
 
     <section id="page-title" class="page-title-classic">
@@ -81,8 +97,14 @@
                             </div>
                             @if($element->youtube_id)
                                 <div class="m-t-30">
-                                    <iframe src="https://www.youtube-nocookie.com/embed/{{$element->youtube_id}}" title="{{$element->name}}" style="width: 100%; aspect-ratio: 16 / 9; border: 0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" loading="lazy" allowfullscreen></iframe>
+                                    <a href="https://www.youtube.com/watch?v={{$element->youtube_id}}" target="_blank" rel="noopener" class="btn btn-outline btn-dark btn-lg" id="video-modal-open" data-video-id="{{$element->youtube_id}}"><i class="fa fa-play m-r-10"></i>Watch video</a>
                                 </div>
+                                <dialog id="video-modal" class="video-modal" aria-label="{{$element->name}}">
+                                    <button type="button" class="video-modal-close" aria-label="Close"><i class="fa fa-times"></i></button>
+                                    <div class="video-modal-frame">
+                                        <iframe title="{{$element->name}}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                    </div>
+                                </dialog>
                             @endif
                     </div>
                 </div>
@@ -105,4 +127,29 @@
         </section>
 
 
+@stop
+
+@section('scripts')
+<script>
+    (function () {
+        var open = document.getElementById('video-modal-open');
+        var modal = document.getElementById('video-modal');
+        if (!open || !modal || !modal.showModal) return;
+        var frame = modal.querySelector('iframe');
+
+        open.addEventListener('click', function (e) {
+            e.preventDefault();
+            frame.src = 'https://www.youtube-nocookie.com/embed/' + open.dataset.videoId + '?autoplay=1&rel=0';
+            modal.showModal();
+        });
+        // backdrop clicks land on the dialog itself
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal || e.target.closest('.video-modal-close')) modal.close();
+        });
+        // stop playback when closed (button, backdrop or ESC)
+        modal.addEventListener('close', function () {
+            frame.src = 'about:blank';
+        });
+    })();
+</script>
 @stop

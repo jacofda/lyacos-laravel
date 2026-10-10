@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,800,700,600|Montserrat:400,500,600,700|Raleway:100,300,600,700,800" rel="stylesheet" type="text/css" />
     <link href="{{asset('css/min.css')}}" rel="stylesheet">
+    @yield('styles')
 </head>
 <body data-animation-icon="15">
     <div id="wrapper">
