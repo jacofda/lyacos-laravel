@@ -29,7 +29,8 @@ class ReadingController extends Controller
     	$this->validate(request(),[
     		'name' => 'required',
     		'country' => 'required',
-    		'published_at' => 'required'
+    		'published_at' => 'required',
+    		'video_url' => ['nullable', 'url', 'regex:'.Reading::YOUTUBE_REGEX]
     	]);
 
     	$element = new Reading;
@@ -48,6 +49,7 @@ class ReadingController extends Controller
     		}
     		$element->start_at_hour = request('start_at_hour');
     		$element->end_at_hour = request('end_at_hour');
+    		$element->video_url = request('video_url');
     	$element->save();
 
     	return redirect('admin/readings')->with('message', 'Reading Created!');
@@ -102,7 +104,8 @@ class ReadingController extends Controller
     	$this->validate(request(),[
     		'name' => 'required',
     		'published_at' => 'required',
-    		'country' => 'required'
+    		'country' => 'required',
+    		'video_url' => ['nullable', 'url', 'regex:'.Reading::YOUTUBE_REGEX]
     	]);
 
     		$element->name = request('name');
@@ -120,6 +123,7 @@ class ReadingController extends Controller
     		}
     		$element->start_at_hour = request('start_at_hour');
     		$element->end_at_hour = request('end_at_hour');
+    		$element->video_url = request('video_url');
     	$element->save();
 
     	return redirect('admin/readings')->with('message', 'Reading Modified!');

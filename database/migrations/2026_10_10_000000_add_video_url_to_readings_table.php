@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('readings', function (Blueprint $table) {
+            $table->string('video_url')->nullable();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        // SQLite drops columns natively (>= 3.35), without doctrine/dbal
+        Schema::useNativeSchemaOperationsIfPossible();
+
+        Schema::table('readings', function (Blueprint $table) {
+            $table->dropColumn('video_url');
+        });
+    }
+};

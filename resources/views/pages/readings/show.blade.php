@@ -79,6 +79,11 @@
                             <div class="project-description pt-4">
                                 <h3>{!! strip_tags($element->description, '<a><b><i><ul><li>') !!}</h3>
                             </div>
+                            @if($element->youtube_id)
+                                <div class="m-t-30">
+                                    <iframe src="https://www.youtube-nocookie.com/embed/{{$element->youtube_id}}" title="{{$element->name}}" style="width: 100%; aspect-ratio: 16 / 9; border: 0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" loading="lazy" allowfullscreen></iframe>
+                                </div>
+                            @endif
                     </div>
                 </div>
             </div>

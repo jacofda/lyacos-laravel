@@ -23,6 +23,15 @@
 	{!! Form::textarea('description', null, ['id' => 'html-editor', 'class' => 'form-control', 'placeholder' => 'at least 150 characters*']) !!}
 </div>
 
+<div class="form-group">
+    {!! Form::text('video_url', null, ['class' => 'form-control', 'placeholder' => 'YouTube video URL (optional) ... https://www.youtube.com/watch?v=...']) !!}
+    @if ($errors->has('video_url'))
+        <span class="error">
+            <strong class="color-danger">{{ $errors->first('video_url') }}</strong>
+        </span>
+    @endif
+</div>
+
 <div class="clearfix"></div>
 <div class="container mb-4">
     <div class="row">
