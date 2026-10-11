@@ -124,8 +124,8 @@
                     @elseif($language == 'turkish')
 
 
-                        <h3>THE TRILOGY IN TURKISH - FORTHCOMING</h3>
-                        <small>BY <a target="_BLANK" href="https://canyayinlari.com/aboutus/">CAN PUBLISHING</a>, ISTANBUL, NOVEMBER 2022</small>
+                        <h3>POENA DAMNI IN TURKISH - FORTHCOMING</h3>
+                        <small>SINGLE-VOLUME EDITION BY <a target="_BLANK" href="https://www.alfakitap.com">ALFA KITAP</a>, ISTANBUL</small>
                         <h4>TRANSLATED BY ARZU EKER</h4>
 
                     @endif
