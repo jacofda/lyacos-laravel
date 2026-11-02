@@ -170,10 +170,13 @@
                                 @endif
                                 {{ $newBook->published_at->isFuture() ? 'forthcoming '.$newBook->published_at->format('F Y') : $newBook->published_at->format('M Y') }}
                             </li>
+                            <li>
+                                <strong>Russian edition</strong> &mdash; Translated by Katerina Basova, Freedom Letters, forthcoming September 2027
+                            </li>
                             @foreach($newBookTranslations as $translation)
                                 <li>
-                                    <a href="{{$translation->uri}}"><strong>{{ucfirst($translation->language->name)}} edition</strong> &mdash; {{$translation->name}},
-                                    translated by {{$translation->translated_by}}, {{$translation->publisher}}, {{$translation->published_at->format('M Y')}}</a>
+                                    <a href="{{$translation->uri}}"><strong>{{ucfirst($translation->language->name)}} edition</strong> &mdash;
+                                    Translated by {{$translation->translated_by}}, {{$translation->publisher}}, {{$translation->published_at->format('M Y')}}</a>
                                 </li>
                             @endforeach
                         </ul>
