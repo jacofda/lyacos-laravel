@@ -71,14 +71,15 @@
         .new-book-cover small { display: block; margin-top: 8px; white-space: nowrap; }
         .new-book-text { flex: 1; min-width: 0; }
         .new-book-text li a { text-decoration: underline; text-underline-offset: 3px; }
+        .new-book-editions li { font-size: 16px; line-height: 1.5; color: #222; margin-bottom: 10px; }
+        .new-book-editions li strong { color: #111; }
         @media (max-width: 767px) {
             .welcome-heading { margin-bottom: 30px; }
             .new-book { flex-direction: column; gap: 20px; }
             .new-book-cover { align-self: center; text-align: center; }
             .new-book-cover img { width: 260px; max-width: 100%; margin: 0 auto; }
             .new-book-editions { margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; }
-            .new-book-editions li { font-size: 17px; line-height: 1.5; color: #222; margin-bottom: 16px; }
-            .new-book-editions li strong { color: #111; }
+            .new-book-editions li { font-size: 17px; margin-bottom: 16px; }
         }
     </style>
 </head>
