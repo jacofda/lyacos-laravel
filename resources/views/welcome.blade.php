@@ -71,7 +71,15 @@
         .new-book-cover small { display: block; margin-top: 8px; white-space: nowrap; }
         .new-book-text { flex: 1; min-width: 0; }
         .new-book-text li a { text-decoration: underline; text-underline-offset: 3px; }
-        @media (max-width: 767px) { .new-book { flex-direction: column; gap: 20px; } }
+        @media (max-width: 767px) {
+            .welcome-heading { margin-bottom: 30px; }
+            .new-book { flex-direction: column; gap: 20px; }
+            .new-book-cover { align-self: center; text-align: center; }
+            .new-book-cover img { width: 260px; max-width: 100%; margin: 0 auto; }
+            .new-book-editions { margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; }
+            .new-book-editions li { font-size: 17px; line-height: 1.5; color: #222; margin-bottom: 16px; }
+            .new-book-editions li strong { color: #111; }
+        }
     </style>
 </head>
 <body>
@@ -138,7 +146,7 @@
 
     <section class="p-b-0">
         <div class="container">
-            <div class="heading text-left">
+            <div class="heading welcome-heading text-left">
                 <span class="lead">Welcome to the official compendium of information and resources on the contemporary author <b>Dimitris Lyacos</b>. Along with news on current publications, here you will find regular updates on readings and other events as well as reviews and interviews in journals and other literary sources.</span>
             </div>
         </div>
@@ -160,7 +168,7 @@
                         <h2 class="asH3"><a href="{{$newBook->uri}}">{{$newBook->name}}</a></h2>
                         <p class="smallerLineHeigh">{{ $newBookIntro }}</p>
                         <p><a href="{{$newBook->uri}}" class="btn btn-dark btn-outline">Read more</a></p>
-                        <ul class="list-unstyled">
+                        <ul class="list-unstyled new-book-editions">
                             <li>
                                 <strong>English edition</strong> &mdash; Translated by {{$newBook->translated_by}},
                                 @if($newBook->buy_link)
