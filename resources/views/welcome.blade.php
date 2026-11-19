@@ -66,6 +66,12 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,800,700,600|Montserrat:400,500,600,700|Raleway:100,300,600,700,800" rel="stylesheet" type="text/css" />
     <link href="{{asset('css/min.css')}}" rel="stylesheet">
     <style>
+        /* second slide: both title lines the same width, so the title stays clear of the book */
+        .inspiro-slider .slide-captions h2.new-book-slide-kicker { font-size: 45px; }
+        @media (min-width: 991px) {
+            .inspiro-slider .slide-captions h2.new-book-slide-kicker { font-size: 84px; }
+            .inspiro-slider .slide-captions h1.new-book-slide-title { font-size: 76px; line-height: 80px; margin-top: -40px; }
+        }
         .new-book { display: flex; align-items: flex-start; gap: 50px; }
         .new-book-cover { flex: none; }
         .new-book-cover img { display: block; width: 200px; height: auto; }
@@ -105,6 +111,15 @@
             <div class="container">
                 <div class="slide-captions text-left">
                     <h1>DIMITRIS <br>LYACOS</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide background-overlay-one" style="background-image:url({{asset('images/home/until-the-victim-becomes-our-own-dimitris-lyacos-cover-bg.jpg')}});">
+            <div class="container">
+                <div class="slide-captions text-right">
+                    <h2 class="new-book-slide-kicker">UNTIL THE VICTIM</h2>
+                    <h1 class="new-book-slide-title">BECOMES OUR OWN</h1>
                 </div>
             </div>
         </div>
