@@ -72,6 +72,10 @@
             .inspiro-slider .slide-captions h2.new-book-slide-kicker { font-size: 84px; }
             .inspiro-slider .slide-captions h1.new-book-slide-title { font-size: 76px; line-height: 80px; margin-top: -40px; }
         }
+        @media (min-width: 991px) and (max-width: 1199px) {
+            .inspiro-slider .slide-captions h2.new-book-slide-kicker { font-size: 64px; }
+            .inspiro-slider .slide-captions h1.new-book-slide-title { font-size: 58px; line-height: 64px; margin-top: -32px; }
+        }
         .new-book { display: flex; align-items: flex-start; gap: 50px; }
         .new-book-cover { flex: none; }
         .new-book-cover img { display: block; width: 200px; height: auto; }
@@ -115,7 +119,7 @@
             </div>
         </div>
 
-        <div class="slide background-overlay-one" style="background-image:url({{asset('images/home/until-the-victim-becomes-our-own-dimitris-lyacos-cover-bg.jpg')}});">
+        <div class="slide background-overlay-one" style="background-image:url({{asset('images/home/until-the-victim-becomes-our-own-dimitris-lyacos-cover-bg.jpg')}}?v=2);">
             <div class="container">
                 <div class="slide-captions text-right">
                     <h2 class="new-book-slide-kicker">UNTIL THE VICTIM</h2>
