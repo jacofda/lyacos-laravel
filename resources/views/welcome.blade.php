@@ -67,17 +67,18 @@
     <link href="{{asset('css/min.css')}}" rel="stylesheet">
     <style>
         .new-book { display: flex; align-items: flex-start; gap: 50px; }
-        .new-book-cover img { display: block; width: 160px; height: auto; }
-        .new-book-cover small { display: block; margin-top: 8px; white-space: nowrap; }
+        .new-book-cover { flex: none; }
+        .new-book-cover img { display: block; width: 200px; height: auto; }
         .new-book-text { flex: 1; min-width: 0; }
         .new-book-text li a { text-decoration: underline; text-underline-offset: 3px; }
         .new-book-editions li { font-size: 16px; line-height: 1.5; color: #222; margin-bottom: 10px; }
         .new-book-editions li strong { color: #111; }
+        .new-book-editions, .new-book-editions li:last-child { margin-bottom: 0; }
         @media (max-width: 767px) {
             .welcome-heading { margin-bottom: 30px; }
             .new-book { flex-direction: column; gap: 20px; }
             .new-book-cover { align-self: center; text-align: center; }
-            .new-book-cover img { width: 260px; max-width: 100%; margin: 0 auto; }
+            .new-book-cover img { width: 260px !important; height: auto !important; max-width: 100%; margin: 0 auto; }
             .new-book-editions { margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; }
             .new-book-editions li { font-size: 17px; margin-bottom: 16px; }
         }
@@ -158,12 +159,9 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-10 col-md-offset-1 new-book">
-                    @if($newBookCoverEdition)
-                        <div class="new-book-cover">
-                            <a href="{{$newBookCoverEdition->uri}}"><img src="{{$newBookCoverEdition->cover}}" alt="cover {{$newBookCoverEdition->name}}"></a>
-                            <small>Cover of the Italian edition</small>
-                        </div>
-                    @endif
+                    <div class="new-book-cover">
+                        <a href="{{$newBook->uri}}"><img src="{{$newBook->cover}}" alt="cover {{$newBook->name}}"></a>
+                    </div>
                     <div class="new-book-text">
                         <span class="uppercase bold">New Book</span>
                         <h2 class="asH3"><a href="{{$newBook->uri}}">{{$newBook->name}}</a></h2>
@@ -290,5 +288,29 @@
     </div>
     <a id="goToTop"><i class="fa fa-angle-up top-icon"></i><i class="fa fa-angle-up"></i></a>
     <script src="{{asset('js/min.js')}}"></script>
+    <script>
+        // Make the new book cover as tall as the text beside it (desktop only).
+        // The cover's width shrinks the text column, which changes its height, so iterate a few times until they match.
+        (function () {
+            var img = document.querySelector('.new-book-cover img');
+            var text = document.querySelector('.new-book-text');
+            if (!img || !text) return;
+            function fit() {
+                if (window.innerWidth < 768) { img.style.width = ''; return; }
+                if (!img.naturalWidth) return; // not loaded yet: the load listener runs it again
+                var ratio = img.naturalWidth / img.naturalHeight;
+                var maxWidth = text.parentNode.clientWidth * 0.4;
+                for (var i = 0; i < 6; i++) {
+                    var width = Math.min(text.offsetHeight * ratio, maxWidth);
+                    if (Math.abs(img.offsetWidth - width) < 1) break;
+                    img.style.width = width + 'px';
+                }
+            }
+            fit();
+            window.addEventListener('load', fit);
+            window.addEventListener('resize', fit);
+            if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+        })();
+    </script>
 </body>
 </html>
